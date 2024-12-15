@@ -8,17 +8,20 @@
     <meta name="description" content="Cuba admin is super flexible, powerful, clean &amp; modern responsive bootstrap 5 admin template with unlimited possibilities.">
     <meta name="keywords" content="admin template, Cuba admin template, dashboard template, flat admin template, responsive admin template, web app">
     <meta name="author" content="pixelstrap">
-    <link rel="icon" href="<?=base_url()?>/assets/images/favicon.png" type="image/x-icon">
-    <link rel="shortcut icon" href="<?=base_url()?>/assets/images/favicon.png" type="image/x-icon">
+    <link rel="icon" href="<?= base_url() ?>/assets/images/favicon.png" type="image/x-icon">
+    <link rel="shortcut icon" href="<?= base_url() ?>/assets/images/favicon.png" type="image/x-icon">
     <title>Cuba - Premium Admin Template</title>
     <!-- Google font-->
     <link href="https://fonts.googleapis.com/css?family=Rubik:400,400i,500,500i,700,700i&amp;display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,500,500i,700,700i,900&amp;display=swap" rel="stylesheet">
     <!-- css -->
     <?= $this->include('Admin/layout/css') ?>
+
+    <!-- Bootstrap core CSS -->
+
 </head>
 
-<body <?= base_url("dashboards/default-dashboard") ?>?onload="startTime()":null>
+<body <?= base_url("dashboards/default-dashboard") ?>?onload="startTime()" :null>
     <!-- loader starts-->
     <div class="loader-wrapper">
         <div class="loader-index"><span></span></div>

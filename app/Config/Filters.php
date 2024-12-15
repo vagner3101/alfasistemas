@@ -35,6 +35,15 @@ class Filters extends BaseFilters
         'pagecache'     => PageCache::class,
         'performance'   => PerformanceMetrics::class,
         'subdomain'     => \App\Filters\SubdomainFilter::class, // Adicionado filtro de subdomínio
+        'session'     => \CodeIgniter\Shield\Filters\SessionAuth::class,
+        'tokens'      => \CodeIgniter\Shield\Filters\TokenAuth::class,
+        'hmac'        => \CodeIgniter\Shield\Filters\HmacAuth::class,
+        'chain'       => \CodeIgniter\Shield\Filters\ChainAuth::class,
+        'auth-rates'  => \CodeIgniter\Shield\Filters\AuthRates::class,
+        'group'       => \CodeIgniter\Shield\Filters\GroupFilter::class,
+        'permission'  => \CodeIgniter\Shield\Filters\PermissionFilter::class,
+        'force-reset' => \CodeIgniter\Shield\Filters\ForcePasswordResetFilter::class,
+        'jwt'         => \CodeIgniter\Shield\Filters\JWTAuth::class,
     ];
 
     /**
@@ -71,6 +80,7 @@ class Filters extends BaseFilters
     public array $globals = [
         'before' => [
             'subdomain' => ['except' => ['login/*', 'register/*', 'erro']],
+            //'session' => ['except' => ['login*', 'register', 'auth/a/*', 'logout']],
             // 'honeypot',
             // 'csrf',
             // 'invalidchars',
@@ -105,5 +115,13 @@ class Filters extends BaseFilters
      *
      * @var array<string, array<string, list<string>>>
      */
-    public array $filters = [];
+    public array $filters = [
+        'auth-rates' => [
+            'before' => [
+                'login*',
+                'register',
+                'auth/*'
+            ]
+        ]
+    ];
 }

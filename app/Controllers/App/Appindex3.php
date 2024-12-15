@@ -15,7 +15,7 @@ class Appindex3 extends Controller
         }
 
         // Carregar a view faq.php da pasta App
-        return view('App/dashboard');
+        return view('App/index');
     }
 
     public function erro()

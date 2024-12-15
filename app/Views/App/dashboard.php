@@ -30,7 +30,7 @@
                     <div class="media">
                         <div class="media-body">
                             <div class="greeting-user">
-                                <h4 class="f-w-600">Welcome to cuba</h4>
+                                <h4 class="f-w-600">Welcome to cuba <?php echo auth()->user()->username; ?> </h4>
                                 <p>Here whats happing in your account today</p>
                                 <div class="whatsnew-btn"><a class="btn btn-outline-white">Whats New !</a></div>
                             </div>

@@ -18,15 +18,20 @@ class App extends BaseConfig
      */
     public string $baseURL = '';
 
-public function __construct()
-{
-    parent::__construct();
+    public function __construct()
+    {
+        parent::__construct();
 
-    // Definir o baseURL dinamicamente
-    $scheme = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http";
-    $host = $_SERVER['HTTP_HOST'];
-    $this->baseURL = "{$scheme}://{$host}/";
-}
+        // Definir o baseURL dinamicamente
+        if (PHP_SAPI === 'cli') {
+            // Se estiver rodando via CLI, use um valor padrão
+            $this->baseURL = 'http://localhost/';
+        } else {
+            $scheme = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http";
+            $host = $_SERVER['HTTP_HOST'] ?? 'localhost';
+            $this->baseURL = "{$scheme}://{$host}/";
+        }
+    }
 
     /**
      * Allowed Hostnames in the Site URL other than the hostname in the baseURL.
@@ -50,7 +55,7 @@ public function __construct()
      * something else. If you have configured your web server to remove this file
      * from your site URIs, set this variable to an empty string.
      */
-    public string $indexPage = 'index.php';
+    public string $indexPage = '';
 
     /**
      * --------------------------------------------------------------------------
@@ -103,7 +108,7 @@ public function __construct()
      * strings (like currency markers, numbers, etc), that your program
      * should run under for this request.
      */
-    public string $defaultLocale = 'en';
+    public string $defaultLocale = 'pt-BR';
 
     /**
      * --------------------------------------------------------------------------
