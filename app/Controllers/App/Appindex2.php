@@ -11,7 +11,7 @@ class Appindex2 extends Controller
         // Verifica se a empresa está na sessão
         $empresa_id = session()->get('empresa_id');
         if (!$empresa_id) {
-            return redirect()->to('/login');
+            return redirect()->to('/login2');
         }
 
         // Carregar a view faq.php da pasta App

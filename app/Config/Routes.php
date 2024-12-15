@@ -32,7 +32,7 @@ $routes->set404Override(static function () {
 
 
 
-//$routes->get('login',  'App\Appindex2::index');
+//$routes->get('login',  'Auth\Login::index');
 //Rotas do Shield
 service('auth')->routes($routes);
 

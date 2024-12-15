@@ -8,9 +8,12 @@
         <div>
           <div><a class="logo" href="<?= base_url("/") ?>"><img class="img-fluid for-light" src="<?= base_url() ?>/assets/images/logo/logo.png" alt="looginpage"><img class="img-fluid for-dark" src="<?= base_url() ?>/assets/images/logo/logo_dark.png" alt="looginpage"></a></div>
           <div class="login-main">
+
             <?php if (session('message') !== null) : ?>
               <div class="alert alert-success" role="alert"><?= session('message') ?></div>
             <?php endif ?>
+
+
             <h4>Entrar</h4>
             <p>Insira sua credencial abaixo:</p>
             <?php if (session('error') !== null) : ?>
@@ -27,7 +30,9 @@
                 <?php endif ?>
               </div>
             <?php endif ?>
-            <form action="<?= url_to('login') ?>" method="post">
+
+
+            <form class="theme-form" action="<?= url_to('login') ?>" method="post">
               <?= csrf_field() ?>
               <!-- Email -->
               <div class="form-group">

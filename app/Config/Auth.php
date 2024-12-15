@@ -48,7 +48,8 @@ class Auth extends ShieldAuth
     public array $views = [
         'login'                       => '\App\Views\Auth\login',
         // 'login'                    => '\CodeIgniter\Shield\Views\login',
-        'register'                    => '\CodeIgniter\Shield\Views\register',
+        'register'                    => '\App\Views\Auth\sign-up',
+        //'register'                    => '\CodeIgniter\Shield\Views\register',
         'layout'                      => '\CodeIgniter\Shield\Views\layout',
         'action_email_2fa'            => '\CodeIgniter\Shield\Views\email_2fa_show',
         'action_email_2fa_verify'     => '\CodeIgniter\Shield\Views\email_2fa_verify',
@@ -75,7 +76,7 @@ class Auth extends ShieldAuth
      * to apply any logic you may need.
      */
     public array $redirects = [
-        'register'          => '/',
+        'register'          => '/',  //redireciona para a tela de dados da empresa
         'login'             => 'app/',
         'logout'            => 'login',
         'force_reset'       => '/',
@@ -429,7 +430,9 @@ class Auth extends ShieldAuth
      *
      * @var class-string<UserModel>
      */
-    public string $userProvider = UserModel::class;
+    //public string $userProvider = UserModel::class;
+    public string $userProvider = \App\Models\UserModel::class;
+
 
     /**
      * Returns the URL that a user should be redirected
