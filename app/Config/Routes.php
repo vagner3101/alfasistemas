@@ -41,8 +41,11 @@ service('auth')->routes($routes);
 $routes->group('app', ['filter' => 'session'], function ($routes) {
     // Grupo APP com filtro de grupo superadmin
     $routes->group('', ['filter' => 'group:admin,superadmin'], function ($routes) {
+        $routes->get('app/empresa', 'App\Empresa::index');
+
+
+
         $routes->get('/', 'App\Appindex::index');
-        $routes->get('dashboard', 'App\Appindex3::index');
     });
 });
 
