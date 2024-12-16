@@ -258,8 +258,8 @@ function translate(tnum) {
 }
 
 var trans = [{
-        en: 'General',
-        pt: 'Geral',
+    en: 'Painel SuperAdmin',
+        pt: 'Painel SuperAdmin',
         es: 'Generalo',
         fr: 'GÃ©nÃ©rale',
         de: 'Generel',
