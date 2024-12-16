@@ -1,15 +1,15 @@
 <?php
 
-namespace App\Controllers\App;
+namespace App\Controllers\Admin;
 
 use CodeIgniter\Controller;
 
-class Appindex extends Controller
+class Adminindex extends Controller
 {
     public function index()
     {
         // Carregar a view index.php da pasta App
-        return view('App/index');
+        return view('Admin/index');
     }
 
 

@@ -37,13 +37,6 @@ class UserModel extends ShieldUserModel
         'cargo'        => 'permit_empty|min_length[2]|max_length[100]',
         'comissionado' => 'permit_empty|in_list[0,1]',
         'comissao'     => 'permit_empty|decimal',
-        'aceito_termos' => 'required|in_list[on]',
-    ];
 
-    protected $validationMessages = [
-        'aceito_termos' => [
-            'required' => 'Você deve aceitar os termos de uso.',
-            'in_list'  => 'Você deve aceitar os termos de uso.',
-        ],
     ];
 }

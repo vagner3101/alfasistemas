@@ -33,8 +33,10 @@ class EmpresaModel extends Model
         'logo_pedidos',
         'plano_id',
         'dominio',
-        'numero_inicial_pedidos'
+        'subdominio',
+        'numero_inicial_pedidos',
     ];
+
 
     // Dates
     protected $useTimestamps = true;

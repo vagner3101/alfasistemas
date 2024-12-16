@@ -35,6 +35,7 @@ class Filters extends BaseFilters
         'pagecache'     => PageCache::class,
         'performance'   => PerformanceMetrics::class,
         'subdomain'     => \App\Filters\SubdomainFilter::class, // Adicionado filtro de subdomínio
+        'empresaAssociada' => \App\Filters\EmpresaAssociada::class, //filtro se tem empresa associada
         'session'     => \CodeIgniter\Shield\Filters\SessionAuth::class,
         'tokens'      => \CodeIgniter\Shield\Filters\TokenAuth::class,
         'hmac'        => \CodeIgniter\Shield\Filters\HmacAuth::class,

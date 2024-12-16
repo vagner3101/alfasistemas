@@ -5,35 +5,63 @@ namespace App\Filters;
 use CodeIgniter\HTTP\RequestInterface;
 use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\Filters\FilterInterface;
+use App\Models\EmpresaModel;
 
 class SubdomainFilter implements FilterInterface
 {
     public function before(RequestInterface $request, $arguments = null)
     {
         $host = $_SERVER['HTTP_HOST'];
+        $mainDomain = env('CentralDomain');
+        $session = session();
+        $user = auth()->user();
+        $empresaModel = new EmpresaModel();
 
-        // Simulação de dados de empresas (subdomínios e domínios personalizados)
-        $empresas = [
-            'grafica1.alfasistemas.test' => ['id' => 1, 'nome' => 'Gráfica 1'],
-            'grafica2.alfasistemas.test' => ['id' => 2, 'nome' => 'Gráfica 2'],
-            'grafica1.com.br' => ['id' => 1, 'nome' => 'Gráfica 1'],
-            'alfasistemas.test' => ['id' => 3, 'nome' => 'Gráfica 2N'],
-
-        ];
-
-        if (isset($empresas[$host])) {
-            $empresa = $empresas[$host];
-            // Armazenar os dados da empresa na sessão para uso subsequente
-            session()->set('empresa_id', $empresa['id']);
-            session()->set('empresa_nome', $empresa['nome']);
+        if ($host === $mainDomain) {
+            // Domínio principal
+            $session->set('is_main_domain', true);
+            if ($user && $user->empresa_id) {
+                $empresa = $empresaModel->find($user->empresa_id);
+                if ($empresa) {
+                    $session->set('empresa_id', $empresa['id']);
+                    $session->set('empresa_nome', $empresa['nome']);
+                } else {
+                    $session->remove('empresa_id');
+                    $this->setDefaultEmpresaNome($session, $user);
+                }
+            } else {
+                $session->remove('empresa_id');
+                $this->setDefaultEmpresaNome($session, $user);
+            }
         } else {
-            // Subdomínio ou domínio personalizado não encontrado, redirecionar para uma página de erro ou página inicial
-            return redirect()->to('/erro');
+            // Subdomínio ou domínio personalizado
+            $session->set('is_main_domain', false);
+            $empresa = $empresaModel->where('subdominio', $host)
+                ->orWhere('dominio', $host)
+                ->first();
+
+            if ($empresa) {
+                $session->set('empresa_id', $empresa['id']);
+                $session->set('empresa_nome', $empresa['nome']);
+            } else {
+                $session->remove('empresa_id');
+                $this->setDefaultEmpresaNome($session, $user);
+                return redirect()->to('http://' . $mainDomain . '/app');
+            }
         }
     }
 
     public function after(RequestInterface $request, ResponseInterface $response, $arguments = null)
     {
         // Não é necessário fazer nada aqui
+    }
+
+    private function setDefaultEmpresaNome($session, $user)
+    {
+        if ($user && $user->inGroup('superadmin')) {
+            $session->set('empresa_nome', 'Administração Central');
+        } else {
+            $session->set('empresa_nome', 'Sistema');
+        }
     }
 }

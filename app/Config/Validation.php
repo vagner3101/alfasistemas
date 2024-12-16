@@ -41,4 +41,15 @@ class Validation extends BaseConfig
     // --------------------------------------------------------------------
     // Rules
     // --------------------------------------------------------------------
+
+    public $registration = [
+        'aceito_termos' => 'required|in_list[on,1,yes,true]',
+    ];
+
+    public $registration_errors = [
+        'aceito_termos' => [
+            'required' => 'Você deve aceitar os termos de uso.',
+            'in_list'  => 'Você deve aceitar os termos de uso.',
+        ],
+    ];
 }

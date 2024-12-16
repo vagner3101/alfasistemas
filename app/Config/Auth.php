@@ -76,12 +76,12 @@ class Auth extends ShieldAuth
      * to apply any logic you may need.
      */
     public array $redirects = [
-        'register'          => '/',  //redireciona para a tela de dados da empresa
+        'register'          => 'app/',  //redireciona para a tela de dados da empresa
         'login'             => 'app/',
         'logout'            => 'login',
         'force_reset'       => '/',
         'permission_denied' => '/',
-        'group_denied'      => '/',
+        'group_denied'      => 'app/dashboard',
     ];
 
     /**
@@ -438,13 +438,58 @@ class Auth extends ShieldAuth
      * Returns the URL that a user should be redirected
      * to after a successful login.
      */
+    /**
+     * Returns the URL that a user should be redirected
+     * to after a successful login.
+     */
     public function loginRedirect(): string
     {
         $session = session();
-        $url     = $session->getTempdata('beforeLoginUrl') ?? setting('Auth.redirects')['login'];
+        $url = $session->getTempdata('beforeLoginUrl') ?? setting('Auth.redirects')['login'];
 
-        return $this->getUrl($url);
+        $user = auth()->user();
+        $isMainDomain = $session->get('is_main_domain', false);
+        $sessionEmpresaId = $session->get('empresa_id');
+
+        // Verifica se o usuário é superadmin
+        if ($user->inGroup('superadmin')) {
+            return '/adm9202'; // Redireciona superadmins para /adm9202
+        }
+
+        if ($isMainDomain) {
+            // No domínio principal, permite acesso normal
+            if (empty($user->empresa_id)) {
+                // Se não tiver empresa relacionada, redireciona para configuração
+                return '/app/empresa';
+            }
+            // Se tiver empresa relacionada, permite acesso normal
+            return $this->getUrl($url);
+        } else {
+            // Em subdomínio ou domínio personalizado
+            if (empty($user->empresa_id)) {
+                // Se não tiver empresa relacionada, redireciona para domínio principal
+                return 'http://' . env('CentralDomain') . '/app';
+            }
+
+            if ($user->empresa_id != $sessionEmpresaId) {
+                // Se a empresa do usuário não corresponder ao domínio atual
+                $empresaModel = model('EmpresaModel');
+                $empresa = $empresaModel->find($user->empresa_id);
+
+                if ($empresa) {
+                    if (!empty($empresa['dominio'])) {
+                        return 'http://' . $empresa['dominio'] . '/app';
+                    } elseif (!empty($empresa['subdominio'])) {
+                        return 'http://' . $empresa['subdominio'] . '.' . env('CentralDomain') . '/app';
+                    }
+                }
+            }
+
+            // Se tudo estiver correto, permite acesso normal
+            return $this->getUrl($url);
+        }
     }
+
 
     /**
      * Returns the URL that a user should be redirected

@@ -106,7 +106,7 @@
 
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark">
-        <a class="navbar-brand" href="#">Gráfica Moderna</a>
+        <a class="navbar-brand" href="#"><?= $empresa['nome'] ?? 'Empresa' ?></a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -127,7 +127,8 @@
 
     <section class="hero-section">
         <div class="container">
-            <h1>Bem-vindo à Gráfica Moderna</h1>
+            <h1>Bem-vindo à <?= $empresa['nome'] ?? 'Empresa' ?></h1>
+            <p>Nosso cnpj <?= $empresa['cpf_cnpj'] ?? 'Empresa' ?></p>
             <p>Qualidade e eficiência em todos os nossos serviços</p>
             <a href="#products" class="btn btn-primary btn-lg mt-4">Conheça nossos produtos</a>
         </div>

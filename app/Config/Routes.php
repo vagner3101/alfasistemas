@@ -27,60 +27,48 @@ $routes->set404Override(static function () {
 });
 
 
-//$routes->get('app',  'App\Appindex::index', ['filter' => 'session']);
-
-
-
-
-//$routes->get('login',  'Auth\Login::index');
-//Rotas do Shield
-service('auth')->routes($routes);
-
-
-// Grupo APP com filtros de sessão e grupo superadmin
-$routes->group('app', ['filter' => 'session'], function ($routes) {
-    // Grupo APP com filtro de grupo superadmin
-    $routes->group('', ['filter' => 'group:admin,superadmin'], function ($routes) {
-        $routes->get('app/empresa', 'App\Empresa::index');
-
-
-
-        $routes->get('/', 'App\Appindex::index');
-    });
-});
-
-
-/*
-//GRUPO DE ROTAS COM FILTRO DE LOGIN
-$routes->group('app', ['filter' => 'session'], function ($routes) {
-    $routes->get('/',  'App\Appindex::index');
-    $routes->get('login',  'App\Appindex2::index');
-    $routes->get('dashboard',  'App\Appindex3::index');
-});
-
-//GRUPO DE ROTAS COM FILTRO  DE PERMIÇÃO
-$routes->get('app/login', 'App\Appindex2::index');
-
-// Grupo APP com filtro de sessão
-$routes->group('app', ['filter' => 'session'], function ($routes) {
-    // Grupo APP com filtro de grupo superadmin
-    $routes->group('', ['filter' => 'group:superadmin'], function ($routes) {
-        $routes->get('/', 'App\Appindex::index');
-        
-        // Grupo APP com filtro de permissão específica
-        $routes->group('', ['filter' => 'permission:view_dashboard'], function ($routes) {
-            $routes->get('dashboard', 'App\Appindex3::index');
-        });
-    });
-});
-
-*/
-
-
-
-//tenat
+//Rotas Publicas - ver rotas de erro e configurar
+$routes->get('erro-acesso', 'Auth\Error403::index', ['as' => 'error403']);
 $routes->get('/erro', 'Home::erro', ['as' => 'erro']);
 $routes->get('/', 'Home::index');
+
+
+// Usar rotas do Shield, exceto para registro
+service('auth')->routes($routes, ['except' => ['register']]);
+// Adicionar rota personalizada para registro
+$routes->get('register', '\App\Controllers\Auth\RegisterController::registerView');
+$routes->post('register', '\App\Controllers\Auth\RegisterController::registerAction');
+
+
+// Grupo de Rotas App
+$routes->group('app', ['filter' => 'session'], function ($routes) {
+
+    //Rrotas sem nivel de acesso
+    $routes->group('', ['filter' => 'empresaAssociada'], function ($routes) {
+        $routes->get('/', 'App\Appindex::index');
+        $routes->get('dashboard', 'App\Dashboard::index', ['as' => 'dashboard']);
+    });
+
+    // Rotas com nível de acesso
+    $routes->group('', ['filter' => 'empresaAssociada,group:admin,superadmin'], function ($routes) {
+        // Rotas que requerem empresa associada E ser admin/superadmin
+    });
+
+    // Rora para configurar empresa
+    $routes->group('', ['filter' => 'group:admin,superadmin'], function ($routes) {
+        $routes->get('empresa', 'App\Empresa::index', ['as' => 'configura.empresa']);
+    });
+});
+
+
+// Grupo de Rotas SuperAdmin
+$routes->group('adm9202', ['filter' => 'session'], function ($routes) {
+
+    // Rotas com nível de acesso Super Admin
+    $routes->group('', ['filter' => 'group:superadmin'], function ($routes) {
+        $routes->get('/', 'Admin\Adminindex::index', ['as' => 'home.admin']);
+    });
+});
 
 
 if (is_file(APPPATH . 'Config/' . ENVIRONMENT . '/Routes.php')) {
