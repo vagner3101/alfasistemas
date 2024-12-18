@@ -132,7 +132,7 @@
             </li>
 
             <li class="sidebar-list">
-              <a class="sidebar-link sidebar-title link-nav" href="<?= url_to('/') ?>">
+              <a class="sidebar-link sidebar-title link-nav" href="<?= url_to('empresas.admin') ?>">
                 <svg class="stroke-icon">
                   <use href="<?= base_url() ?>/assets/svg/icon-sprite.svg#stroke-home"></use>
                 </svg>
@@ -178,9 +178,6 @@
                 <span>Relatórios</span>
               </a>
             </li>
-
-
-
           <?php endif; ?>
 
 

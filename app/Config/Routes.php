@@ -69,6 +69,8 @@ $routes->group('adm9202', ['filter' => 'session'], function ($routes) {
     // Rotas com nível de acesso Super Admin
     $routes->group('', ['filter' => 'group:superadmin'], function ($routes) {
         $routes->get('/', 'Admin\Adminindex::index', ['as' => 'home.admin']);
+        $routes->get('empresas', 'Admin\Empresas::index', ['as' => 'empresas.admin']);
+        $routes->get('empresas/ver', 'Admin\Empresas::view', ['as' => 'verempresas.admin']);
     });
 });
 
