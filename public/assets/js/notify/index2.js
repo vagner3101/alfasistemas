@@ -1,5 +1,5 @@
 'use strict';
-var notify = $.notify('<i class="fa fa-bell-o"></i><strong>Carregando</strong> dados...', {
+var notify = $.notify('<i class="fa fa-bell-o"></i><strong>Carregando</strong> dados235...', {
     type: 'theme',
     allow_dismiss: true,
     delay: 2000,

@@ -45,6 +45,11 @@ abstract class BaseController extends Controller
         // Do Not Edit This Line
         parent::initController($request, $response, $logger);
 
+        // Adiciona headers para prevenir cache
+        $this->response->setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0');
+        $this->response->setHeader('Cache-Control', 'post-check=0, pre-check=0', false);
+        $this->response->setHeader('Pragma', 'no-cache');
+
         // Preload any models, libraries, etc, here.
 
         // E.g.: $this->session = \Config\Services::session();

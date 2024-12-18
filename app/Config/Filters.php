@@ -81,6 +81,7 @@ class Filters extends BaseFilters
     public array $globals = [
         'before' => [
             'subdomain' => ['except' => ['login/*', 'register/*', 'erro']],
+            //'empresaAssociada' => ['except' => ['login*', 'register', 'auth/*', 'app/empresa']],
             //'session' => ['except' => ['login*', 'register', 'auth/a/*', 'logout']],
             // 'honeypot',
             // 'csrf',

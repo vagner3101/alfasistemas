@@ -33,7 +33,22 @@
 
 
 
+                    <h2>Informações da Empresa</h2>
+                    <p>Nome da Empresa: <?= esc($empresa_nome ?? 'Não definido') ?></p>
+                    <p>ID da Empresa: <?= esc($empresa_id ?? 'Não definido') ?></p>
 
+                    <?php if (!empty($empresa_data)): ?>
+                        <h3>Dados da Empresa:</h3>
+                        <pre><?= esc(print_r($empresa_data, true)) ?></pre>
+                    <?php else: ?>
+                        <p>Dados da empresa não disponíveis.</p>
+                    <?php endif; ?>
+
+                    <h3>Informações de Debug:</h3>
+                    <pre><?= esc(print_r($debug_info, true)) ?></pre>
+
+                    <h3>Todas as Empresas:</h3>
+                    <pre><?= esc(print_r($debug_info['todas_empresas'] ?? [], true)) ?></pre>
 
 
 

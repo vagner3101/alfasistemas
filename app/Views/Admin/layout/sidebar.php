@@ -120,7 +120,7 @@
               </div>
             </li>
             <li class="sidebar-list">
-              <a class="sidebar-link sidebar-title link-nav" href="<?= url_to('/') ?>">
+              <a class="sidebar-link sidebar-title link-nav" href="<?= url_to('home.admin') ?>">
                 <svg class="stroke-icon">
                   <use href="<?= base_url() ?>/assets/svg/icon-sprite.svg#stroke-widget"></use>
                 </svg>
@@ -132,7 +132,7 @@
             </li>
 
             <li class="sidebar-list">
-              <a class="sidebar-link sidebar-title link-nav" href="<?= url_to('home.admin') ?>">
+              <a class="sidebar-link sidebar-title link-nav" href="<?= url_to('/') ?>">
                 <svg class="stroke-icon">
                   <use href="<?= base_url() ?>/assets/svg/icon-sprite.svg#stroke-home"></use>
                 </svg>

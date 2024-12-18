@@ -31,6 +31,7 @@ $routes->set404Override(static function () {
 $routes->get('erro-acesso', 'Auth\Error403::index', ['as' => 'error403']);
 $routes->get('/erro', 'Home::erro', ['as' => 'erro']);
 $routes->get('/', 'Home::index');
+$routes->get('checksubdominio', 'App\Empresa::checkSubdominio');
 
 
 // Usar rotas do Shield, exceto para registro
@@ -43,20 +44,21 @@ $routes->post('register', '\App\Controllers\Auth\RegisterController::registerAct
 // Grupo de Rotas App
 $routes->group('app', ['filter' => 'session'], function ($routes) {
 
-    //Rrotas sem nivel de acesso
+    //Rrotas Empresa Assosiada mais sem nível de acesso
     $routes->group('', ['filter' => 'empresaAssociada'], function ($routes) {
         $routes->get('/', 'App\Appindex::index');
         $routes->get('dashboard', 'App\Dashboard::index', ['as' => 'dashboard']);
-    });
 
-    // Rotas com nível de acesso
-    $routes->group('', ['filter' => 'empresaAssociada,group:admin,superadmin'], function ($routes) {
-        // Rotas que requerem empresa associada E ser admin/superadmin
+        // Rotas com nível de acesso Admin e Empresa Associada
+        $routes->group('', ['filter' => 'group:admin,superadmin'], function ($routes) {
+            $routes->post('empresa/salvar', 'App\Empresa::salvar', ['as' => 'empresa.salvar']);
+        });
     });
 
     // Rora para configurar empresa
     $routes->group('', ['filter' => 'group:admin,superadmin'], function ($routes) {
         $routes->get('empresa', 'App\Empresa::index', ['as' => 'configura.empresa']);
+        $routes->get('empresa/checkSubdominio', 'App\Empresa::checkSubdominio');
     });
 });
 

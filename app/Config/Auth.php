@@ -80,8 +80,8 @@ class Auth extends ShieldAuth
         'login'             => 'app/',
         'logout'            => 'login',
         'force_reset'       => '/',
-        'permission_denied' => '/',
-        'group_denied'      => 'app/dashboard',
+        'permission_denied' => 'erro-acesso',
+        'group_denied'      => 'erro-acesso',
     ];
 
     /**
@@ -451,44 +451,51 @@ class Auth extends ShieldAuth
         $isMainDomain = $session->get('is_main_domain', false);
         $sessionEmpresaId = $session->get('empresa_id');
 
+        log_message('debug', "LoginRedirect: User ID: {$user->id}, Is Main Domain: " . ($isMainDomain ? 'true' : 'false') . ", Session Empresa ID: " . ($sessionEmpresaId ?? 'None'));
+
         // Verifica se o usuário é superadmin
         if ($user->inGroup('superadmin')) {
-            return '/adm9202'; // Redireciona superadmins para /adm9202
+            log_message('debug', "LoginRedirect: Superadmin redirect to /adm9202");
+            return '/adm9202';
         }
 
         if ($isMainDomain) {
-            // No domínio principal, permite acesso normal
+            // No domínio principal
             if (empty($user->empresa_id)) {
-                // Se não tiver empresa relacionada, redireciona para configuração
+                log_message('debug', "LoginRedirect: User without empresa, redirecting to /app/empresa");
                 return '/app/empresa';
             }
-            // Se tiver empresa relacionada, permite acesso normal
+            log_message('debug', "LoginRedirect: User on main domain, normal access");
             return $this->getUrl($url);
         } else {
             // Em subdomínio ou domínio personalizado
             if (empty($user->empresa_id)) {
-                // Se não tiver empresa relacionada, redireciona para domínio principal
+                log_message('debug', "LoginRedirect: User without empresa on subdomain, redirecting to main domain");
                 return 'http://' . env('CentralDomain') . '/app';
             }
 
-            if ($user->empresa_id != $sessionEmpresaId) {
-                // Se a empresa do usuário não corresponder ao domínio atual
-                $empresaModel = model('EmpresaModel');
-                $empresa = $empresaModel->find($user->empresa_id);
+            $empresaModel = model('EmpresaModel');
+            $empresa = $empresaModel->find($user->empresa_id);
 
-                if ($empresa) {
-                    if (!empty($empresa['dominio'])) {
-                        return 'http://' . $empresa['dominio'] . '/app';
-                    } elseif (!empty($empresa['subdominio'])) {
-                        return 'http://' . $empresa['subdominio'] . '.' . env('CentralDomain') . '/app';
-                    }
+            if (!$empresa) {
+                log_message('debug', "LoginRedirect: User empresa not found, redirecting to main domain");
+                return 'http://' . env('CentralDomain') . '/app';
+            }
+
+            if ($empresa['id'] != $sessionEmpresaId) {
+                log_message('debug', "LoginRedirect: User on wrong subdomain, redirecting to correct one");
+                if (!empty($empresa['dominio'])) {
+                    return 'http://' . $empresa['dominio'] . '/app';
+                } elseif (!empty($empresa['subdominio'])) {
+                    return 'http://' . $empresa['subdominio'] . '/app';
                 }
             }
 
-            // Se tudo estiver correto, permite acesso normal
+            log_message('debug', "LoginRedirect: User on correct subdomain, normal access");
             return $this->getUrl($url);
         }
     }
+
 
 
     /**

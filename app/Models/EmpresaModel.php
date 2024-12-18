@@ -15,6 +15,7 @@ class EmpresaModel extends Model
     protected $protectFields    = true;
     protected $allowedFields    = [
         'nome',
+        'tipo_empresa',
         'razao_social',
         'cpf_cnpj',
         'cep',
